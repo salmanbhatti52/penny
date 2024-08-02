@@ -90,4 +90,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-If you have any questions or suggestions, feel free to open an issue or contact the project maintainer at [zaindev@duck.com].
+If you have any questions or suggestions, please feel free to [open an issue](https://github.com/salmanbhatti52/penny/issues) or contact the project maintainer at [zaindev@duck.com](zaindev@duck.com).
