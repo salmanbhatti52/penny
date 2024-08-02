@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
 import 'package:penny_places/presentation/providers/getProfileProvider.dart';
+import 'package:penny_places/presentation/providers/placeTypeProvider.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
 import 'package:penny_places/presentation/screens/onboarding_screen.dart';
 import 'package:penny_places/presentation/screens/splash_screen.dart';
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => GetProfileProvider()),
+        ChangeNotifierProvider(create: (_) => PlaceTypeProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
