@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
+import 'package:penny_places/presentation/providers/deleteAccountProvider.dart';
+import 'package:penny_places/presentation/providers/fetchPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/getProfileProvider.dart';
 import 'package:penny_places/presentation/providers/placeTypeProvider.dart';
+import 'package:penny_places/presentation/providers/privatePostProvider.dart';
+import 'package:penny_places/presentation/providers/publicPostProvider.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
 import 'package:penny_places/presentation/screens/onboarding_screen.dart';
 import 'package:penny_places/presentation/screens/splash_screen.dart';
@@ -24,9 +28,11 @@ class AppBloc {
     userName = prefs?.getString('userName');
     email = prefs?.getString('email');
     profilePic = prefs?.getString('profilePicture');
+    bio = prefs?.getString('bio');
     debugPrint("userID: $userID");
     debugPrint("userName: $userName");
     debugPrint("profilePic: $profilePic");
+    debugPrint("bio: $bio");
 
     if (shownOnboarding) {
       if (userID != null) {
@@ -52,6 +58,7 @@ String? userID;
 String? userName;
 String? email;
 String? profilePic;
+String? bio;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,6 +99,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => GetProfileProvider()),
         ChangeNotifierProvider(create: (_) => PlaceTypeProvider()),
+        ChangeNotifierProvider(create: (_) => DeleteAccountProvider()),
+        ChangeNotifierProvider(create: (_) => PublicPostProvider()),
+        ChangeNotifierProvider(create: (_) => PrivatePostProvider()),
+        ChangeNotifierProvider(create: (_) => FetchPlacesPostProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

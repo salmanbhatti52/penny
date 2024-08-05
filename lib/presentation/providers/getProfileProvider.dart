@@ -51,9 +51,11 @@ class GetProfileProvider with ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> fetchProfileAndConvertImage(String userID) async {
+  Future<Map<String, dynamic>> fetchProfileAndConvertImage(
+      String userID) async {
     await getProfile(userID);
-    final base64Image = await convertImageToBase64("https://penny.eigix.net/public/${_getProfileModel.data!.profilePicture}");
+    final base64Image = await convertImageToBase64(
+        "https://penny.eigix.net/public/${_getProfileModel.data!.profilePicture}");
     return {
       'profile': _getProfileModel,
       'base64Image': base64Image,
