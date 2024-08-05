@@ -22,6 +22,7 @@ class AppBloc {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     userName = prefs?.getString('userName');
+    email = prefs?.getString('email');
     profilePic = prefs?.getString('profilePicture');
     debugPrint("userID: $userID");
     debugPrint("userName: $userName");
@@ -49,6 +50,7 @@ SharedPreferences? _prefs;
 SharedPreferences? prefs;
 String? userID;
 String? userName;
+String? email;
 String? profilePic;
 
 void main() async {

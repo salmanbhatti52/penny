@@ -7,6 +7,7 @@ class LocalDataSource {
     prefs = await SharedPreferences.getInstance();
     await prefs!.setString('userID', model.data!.usersCustomersId.toString());
     await prefs!.setString('userName', model.data!.userName);
+    await prefs!.setString('email', model.data!.email);
     await prefs!.setString('profilePicture', model.data!.profilePicture ?? '');
   }
 }
