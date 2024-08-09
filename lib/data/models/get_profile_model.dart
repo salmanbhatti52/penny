@@ -32,42 +32,42 @@ class GetProfileModel {
 }
 
 class Data {
-  int usersCustomersId;
+  int? usersCustomersId;
   dynamic referralUsersCustomersId;
-  String oneSignalId;
-  String userName;
-  String email;
-  String password;
-  String accountType;
+  String? oneSignalId;
+  String? userName;
+  String? email;
+  String? password;
+  String? accountType;
   dynamic profilePicture;
   dynamic profileBio;
   dynamic socialAccType;
   dynamic googleAccessToken;
   dynamic facebookId;
   dynamic authenticationToken;
-  DateTime dateAdded;
-  String status;
+  DateTime? dateAdded;
+  String? status;
   dynamic verifyCode;
-  String notifications;
+  String? notifications;
 
   Data({
-    required this.usersCustomersId,
-    required this.referralUsersCustomersId,
-    required this.oneSignalId,
-    required this.userName,
-    required this.email,
-    required this.password,
-    required this.accountType,
-    required this.profilePicture,
-    required this.profileBio,
-    required this.socialAccType,
-    required this.googleAccessToken,
-    required this.facebookId,
-    required this.authenticationToken,
-    required this.dateAdded,
-    required this.status,
-    required this.verifyCode,
-    required this.notifications,
+    this.usersCustomersId,
+    this.referralUsersCustomersId,
+    this.oneSignalId,
+    this.userName,
+    this.email,
+    this.password,
+    this.accountType,
+    this.profilePicture,
+    this.profileBio,
+    this.socialAccType,
+    this.googleAccessToken,
+    this.facebookId,
+    this.authenticationToken,
+    this.dateAdded,
+    this.status,
+    this.verifyCode,
+    this.notifications,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -104,7 +104,7 @@ class Data {
         "google_access_token": googleAccessToken,
         "facebook_id": facebookId,
         "authentication_token": authenticationToken,
-        "date_added": dateAdded.toIso8601String(),
+        "date_added": dateAdded!.toIso8601String(),
         "status": status,
         "verify_code": verifyCode,
         "notifications": notifications,

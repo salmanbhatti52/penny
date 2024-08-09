@@ -34,7 +34,8 @@ class PlaceTypeProvider with ChangeNotifier {
         print("in 200 place_types");
         print("SuccessFull");
         _placesTypeModel = PlacesTypeModel.fromJson(response.data);
-        _placeTypes = _placesTypeModel.data!.map((datum) => datum.place).toList();
+        _placeTypes =
+            _placesTypeModel.data!.map((datum) => datum.place).toList();
       }
 
       _isLoading = false;

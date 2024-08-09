@@ -15,15 +15,15 @@ class SignInModel {
   Data? data;
 
   SignInModel({
-     this.status,
-     this.message,
-     this.data,
+    this.status,
+    this.message,
+    this.data,
   });
 
   factory SignInModel.fromJson(Map<String, dynamic> json) => SignInModel(
         status: json["status"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: json["data"] != null ? Data.fromJson(json["data"]) : null,
       );
 
   Map<String, dynamic> toJson() => {

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
+import 'package:penny_places/presentation/providers/addPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/deleteAccountProvider.dart';
 import 'package:penny_places/presentation/providers/fetchPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/getProfileProvider.dart';
 import 'package:penny_places/presentation/providers/placeTypeProvider.dart';
+import 'package:penny_places/presentation/providers/postLikeProvider.dart';
+import 'package:penny_places/presentation/providers/postPlaceCountProvider.dart';
 import 'package:penny_places/presentation/providers/privatePostProvider.dart';
 import 'package:penny_places/presentation/providers/publicPostProvider.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
@@ -103,6 +106,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PublicPostProvider()),
         ChangeNotifierProvider(create: (_) => PrivatePostProvider()),
         ChangeNotifierProvider(create: (_) => FetchPlacesPostProvider()),
+        ChangeNotifierProvider(create: (_) => AddPlacesProvider()),
+        ChangeNotifierProvider(create: (_) => PostLikeProvider()),
+        ChangeNotifierProvider(create: (_) => PostPlaceCountProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

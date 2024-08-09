@@ -591,12 +591,14 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             TextButton(
               child: const Text('Logout'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const SignInScreen()),
                   (Route<dynamic> route) => false,
                 );
+                prefs = await SharedPreferences.getInstance();
+                await prefs!.clear();
               },
             ),
           ],

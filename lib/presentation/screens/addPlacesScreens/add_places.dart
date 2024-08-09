@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
+import 'package:penny_places/presentation/providers/addPlacesProvider.dart';
 
 import 'package:penny_places/presentation/screens/addPlacesScreens/private_post_screen.dart';
 import 'package:penny_places/presentation/screens/addPlacesScreens/public_post_screen.dart';
@@ -12,6 +13,14 @@ class AddPlaces extends StatefulWidget {
 }
 
 class _AddPlacesState extends State<AddPlaces> {
+  final AddPlacesProvider _addPlacesProvider = AddPlacesProvider();
+
+  @override
+  void dispose() {
+    _addPlacesProvider.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -83,7 +92,7 @@ class _AddPlacesState extends State<AddPlaces> {
                         // color: Color.fromRGBO(248, 249, 251, 1),
                       ),
                       child: const Tab(
-                        text: "Private Post",
+                        text: "Public Post",
                       ),
                     ),
                     Container(
@@ -95,7 +104,7 @@ class _AddPlacesState extends State<AddPlaces> {
                         // color: Color.fromRGBO(248, 249, 251, 1),
                       ),
                       child: const Tab(
-                        text: "Public Post",
+                        text: "Private Post",
                       ),
                     ),
                   ],
@@ -109,8 +118,8 @@ class _AddPlacesState extends State<AddPlaces> {
                 // physics: AlwaysScrollableScrollPhysics(),
                 // controller: _tabController,
                 children: [
-                  PrivatePostScreen(),
                   PublicPostScreen(),
+                  PrivatePostScreen(),
                 ],
               ),
             ),

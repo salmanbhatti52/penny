@@ -44,7 +44,10 @@ class Datum {
   String? placeName;
   String? placeTypeName;
   String? placeDescription;
+  String? placeRating;
   String? placeLocation;
+  int? likeCount;
+  bool? likedByMe;
   String? dateAdded;
   User? user;
   List<Image>? images;
@@ -55,7 +58,10 @@ class Datum {
     this.placeName,
     this.placeTypeName,
     this.placeDescription,
+    this.placeRating,
     this.placeLocation,
+    this.likeCount,
+    this.likedByMe,
     this.dateAdded,
     this.user,
     this.images,
@@ -67,7 +73,10 @@ class Datum {
         placeName: json["place_name"],
         placeTypeName: json["place_type_name"],
         placeDescription: json["place_description"],
+        placeRating: json["place_rating"],
         placeLocation: json["place_location"],
+        likeCount: json["likes_count"],
+        likedByMe: json["liked_by_me"],
         dateAdded: json["date_added"],
         user: User.fromJson(json["user"]),
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
@@ -80,7 +89,10 @@ class Datum {
         "place_name": placeName,
         "place_type_name": placeTypeName,
         "place_description": placeDescription,
+        "place_rating": placeRating,
         "place_location": placeLocation,
+        "likes_count": likeCount,
+        "liked_by_me": likedByMe,
         "date_added": dateAdded,
         "user": user!.toJson(),
         "images": List<dynamic>.from(images!.map((x) => x.toJson())),
@@ -109,35 +121,51 @@ class Image {
 }
 
 class Review {
-  int? reviewId;
-  int? reviewUserId;
-  int? rating;
-  String? review;
-  int? likesCount;
+    int reviewId;
+    int reviewUserId;
+    String reviewUserName;
+    String reviewUserEmail;
+    String reviewUserProfilePicture;
+    int rating;
+    String review;
+    int likesCount;
+    bool likedByMe;
 
-  Review({
-    this.reviewId,
-    this.reviewUserId,
-    this.rating,
-    this.review,
-    this.likesCount,
-  });
+    Review({
+        required this.reviewId,
+        required this.reviewUserId,
+        required this.reviewUserName,
+        required this.reviewUserEmail,
+        required this.reviewUserProfilePicture,
+        required this.rating,
+        required this.review,
+        required this.likesCount,
+        required this.likedByMe,
+    });
 
-  factory Review.fromJson(Map<String, dynamic> json) => Review(
+    factory Review.fromJson(Map<String, dynamic> json) => Review(
         reviewId: json["review_id"],
         reviewUserId: json["review_user_id"],
+        reviewUserName: json["review_user_name"],
+        reviewUserEmail: json["review_user_email"],
+        reviewUserProfilePicture: json["review_user_profile_picture"],
         rating: json["rating"],
         review: json["review"],
         likesCount: json["likes_count"],
-      );
+        likedByMe: json["liked_by_me"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "review_id": reviewId,
         "review_user_id": reviewUserId,
+        "review_user_name": reviewUserName,
+        "review_user_email": reviewUserEmail,
+        "review_user_profile_picture": reviewUserProfilePicture,
         "rating": rating,
         "review": review,
         "likes_count": likesCount,
-      };
+        "liked_by_me": likedByMe,
+    };
 }
 
 class User {

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:penny_places/core/constants/api_constants.dart';
@@ -38,24 +36,23 @@ class PublicPostProvider with ChangeNotifier {
       print("in 200 fetch_user_places_public");
       print("SuccessFull");
       _publicProfilePostModel = publicProfilePostModelFromJson(responseString);
+
+      // Extract only the first image of each place
       _imageUrls = _publicProfilePostModel.data
-              ?.expand((datum) =>
-                  datum.images?.map((image) {
-                    final url =
-                        "${ApiConstants.imageBaseUrl}/${image.imageName ?? ''}";
-                    return url.toString();
-                  }) ??
-                  [])
-              .toList()
-              .cast<String>() ??
+              ?.map((datum) {
+                if (datum.images != null && datum.images!.isNotEmpty) {
+                  final url =
+                      "${ApiConstants.imageBaseUrl}/${datum.images!.first.imageName ?? ''}";
+                  return url.toString();
+                }
+                return null;
+              })
+              .where((url) => url != null)
+              .cast<String>()
+              .toList() ??
           [];
 
-      // print("_imageUrls: $_imageUrls");
       _quotedImageUrls = _imageUrls.map((url) => '"$url"').toList();
-      // debugPrint("quotedImageUrls: $quotedImageUrls");
-      // JSON encode the list
-      String jsonEncodedUrls = jsonEncode(_imageUrls);
-      // print("JSON Encoded _imageUrls: $jsonEncodedUrls");
     }
 
     _isLoading = false;
