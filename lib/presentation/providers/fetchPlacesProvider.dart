@@ -6,17 +6,49 @@ import 'package:penny_places/data/models/fetch_places_model.dart';
 
 class FetchPlacesPostProvider with ChangeNotifier {
   bool _isLoading = false;
-    bool _isFirstLoad = true;
+  bool _isFirstLoad = true;
   FetchPlacesModel _fetchPlacesModel = FetchPlacesModel();
   List<String> _imageUrls = [];
   List<String> _quotedImageUrls = [];
   int _currentPage = 0; // Track the current page index
-    bool get isFirstLoad => _isFirstLoad;
+  bool get isFirstLoad => _isFirstLoad;
   bool get isLoading => _isLoading;
   FetchPlacesModel get fetchPlacesModel => _fetchPlacesModel;
   List<String> get imageUrls => _imageUrls;
   List<String> get quotedImageUrls => _quotedImageUrls;
   int get currentPage => _currentPage; // Getter for currentPage
+  List<Datum> _filteredPlaces = [];
+
+  List<Datum> get filteredPlaces =>
+      _filteredPlaces.isEmpty ? _fetchPlacesModel.data ?? [] : _filteredPlaces;
+
+  void filterPlaces(String keyword) {
+    if (keyword.isEmpty) {
+      _filteredPlaces = [];
+    } else {
+      _filteredPlaces = _fetchPlacesModel.data
+              ?.where((place) =>
+                  place.placeName
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeDescription
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeLocation
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeTypeName
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true)
+              .toList() ??
+          [];
+    }
+    notifyListeners();
+  }
 
   set currentPage(int value) {
     _currentPage = value; // Setter for currentPage
@@ -78,7 +110,7 @@ class FetchPlacesPostProvider with ChangeNotifier {
     }
 
     _isLoading = false;
-     _isFirstLoad = false;
+    _isFirstLoad = false;
     notifyListeners();
 
     print('fetch_places status: ${_fetchPlacesModel.status}');
@@ -104,7 +136,7 @@ class FetchPlacesPostProvider with ChangeNotifier {
           "place_id": placeId,
           "place_reviews_id": reviewId,
         },
-      );  
+      );
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);

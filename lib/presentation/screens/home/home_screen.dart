@@ -9,10 +9,7 @@ import 'package:penny_places/presentation/providers/postLikeProvider.dart';
 import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
 import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
-import 'package:penny_places/presentation/screens/nav_bar.dart';
 import 'package:penny_places/presentation/screens/profileScreens/otherUserProfile/other_user_profile.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -96,10 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: const Color(0xFF000000), fontSize: 16),
                     cursorColor: const Color(0xFF000000),
                     controller: search,
-                    // keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      // Update the filtered list in provider when search query changes
+                      getAllPostProvider.filterPlaces(value);
+                    },
                     decoration: InputDecoration(
                       prefix: Container(width: 16),
-                      filled: true, // Add this line
+                      filled: true,
                       fillColor: const Color(0xFFF4F4F4),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(12),
@@ -109,19 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 23,
                         ),
                       ),
-
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                             width: 1, color: Color(0xFFEEEEEE)),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      // labelText: 'Email',
                       hintText: 'Type here to Search...',
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14),
                         borderSide: const BorderSide(
-                            width: 1,
-                            color: Color(0xFFEEEEEE)), // change border color
+                            width: 1, color: Color(0xFFEEEEEE)),
                       ),
                       hintStyle: GoogleFonts.poppins(
                         color: const Color(0xFF7F8C8D),
