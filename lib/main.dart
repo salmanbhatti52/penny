@@ -7,6 +7,7 @@ import 'package:penny_places/presentation/providers/addPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/deleteAccountProvider.dart';
 import 'package:penny_places/presentation/providers/fetchPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/getProfileProvider.dart';
+import 'package:penny_places/presentation/providers/openPostProvider.dart';
 import 'package:penny_places/presentation/providers/placeTypeProvider.dart';
 import 'package:penny_places/presentation/providers/postLikeProvider.dart';
 import 'package:penny_places/presentation/providers/postPlaceCountProvider.dart';
@@ -109,6 +110,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => AddPlacesProvider()),
         ChangeNotifierProvider(create: (_) => PostLikeProvider()),
         ChangeNotifierProvider(create: (_) => PostPlaceCountProvider()),
+        ChangeNotifierProvider(create: (_) => OpenPostProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

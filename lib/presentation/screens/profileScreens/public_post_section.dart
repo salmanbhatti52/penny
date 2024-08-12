@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:penny_places/main.dart';
 import 'package:penny_places/presentation/providers/publicPostProvider.dart';
+import 'package:penny_places/presentation/screens/profileScreens/open_post_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -67,18 +68,32 @@ class _PublicPostSectionState extends State<PublicPostSection> {
             crossAxisSpacing: 2, // Horizontal space between items
             mainAxisSpacing: 2, // Vertical space between items
           ),
+          
           itemCount: images.length,
+
           itemBuilder: (context, index) {
-            return CachedNetworkImage(
-              imageUrl: images[index],
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                  strokeWidth: 2,
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OpenPostScreen(
+                      index: index,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: images[index],
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blue,
+                    strokeWidth: 2,
+                  ),
                 ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
             );
           },
         );
