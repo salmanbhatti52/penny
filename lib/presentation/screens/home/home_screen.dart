@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:penny_places/data/models/fetch_places_model.dart';
 import 'package:penny_places/presentation/providers/postLikeProvider.dart';
 import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
 import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer<FetchPlacesPostProvider>(
         builder: (context, getAllPostProvider, child) {
       final data = getAllPostProvider.fetchPlacesModel.data;
+      List<Datum> data1 = getAllPostProvider.filteredPlaces;
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -624,7 +626,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: data?.length ?? 0,
+                          itemCount: search.text.isNotEmpty
+                              ? data1.length ?? 0
+                              : data?.length ?? 0,
                           itemBuilder: (context, index) {
                             final item = data?[data.length - 1 - index];
                             print("item: ${item!.images!.length}");
