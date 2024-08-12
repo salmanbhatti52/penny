@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:penny_places/main.dart';
 import 'package:penny_places/presentation/providers/publicPostProvider.dart';
-import 'package:penny_places/presentation/screens/profileScreens/open_post_screen.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/open_post_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PublicPostSection extends StatefulWidget {
-  const PublicPostSection({super.key});
+  const PublicPostSection({super.key, });
 
   @override
   State<PublicPostSection> createState() => _PublicPostSectionState();
@@ -61,6 +62,7 @@ class _PublicPostSectionState extends State<PublicPostSection> {
         }
 
         final images = publicPostProvider.imageUrls;
+
         print("images: $images");
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -68,23 +70,31 @@ class _PublicPostSectionState extends State<PublicPostSection> {
             crossAxisSpacing: 2, // Horizontal space between items
             mainAxisSpacing: 2, // Vertical space between items
           ),
-          
           itemCount: images.length,
-
           itemBuilder: (context, index) {
+            final reversedIndex = images.length - 1 - index;
+            final imageUrl = images[reversedIndex];
+            final reversedIndex1 =
+                publicPostProvider.publicProfilePostModel.data!.length -
+                    1 -
+                    index;
+            final index1 = publicPostProvider
+                .publicProfilePostModel.data![reversedIndex1].palaceId;
+
             return GestureDetector(
               onTap: () {
+                debugPrint("index: $index1");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => OpenPostScreen(
-                      index: index,
+                      index: index1!,
                     ),
                   ),
                 );
               },
               child: CachedNetworkImage(
-                imageUrl: images[index],
+                imageUrl: imageUrl,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => const Center(
                   child: CircularProgressIndicator(

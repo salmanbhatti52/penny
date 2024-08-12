@@ -1,18 +1,18 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
 import 'package:penny_places/presentation/screens/addPlacesScreens/add_places.dart';
 import 'package:penny_places/presentation/screens/home/home_screen.dart';
-import 'package:penny_places/presentation/screens/profileScreens/profile_screen.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/profile_screen.dart';
 import 'package:penny_places/presentation/screens/settings/setting_screen.dart';
 
 class NavBar extends StatefulWidget {
+  final int index; // Added final int index
+
   const NavBar({
     super.key,
-    Key,
+    this.index = 0, // Default value of index is 0
   });
 
   @override
@@ -20,12 +20,15 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int index = 0;
+  late int index;
   late List<Widget> screens;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize index with the value passed from the widget
+    index = widget.index;
 
     screens = [
       const HomeScreen(),
@@ -104,12 +107,4 @@ class _NavBarState extends State<NavBar> {
       ),
     );
   }
-
-  selectedTab(index) {
-    setState(() {
-      index = index;
-    });
-  }
-
-  bool exit = false;
 }

@@ -11,10 +11,10 @@ import 'package:penny_places/data/models/get_profile_model.dart';
 import 'package:penny_places/main.dart';
 import 'package:penny_places/presentation/providers/getProfileProvider.dart';
 import 'package:penny_places/presentation/providers/postPlaceCountProvider.dart';
-import 'package:penny_places/presentation/screens/profileScreens/edit_profile.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/edit_profile.dart';
 
-import 'package:penny_places/presentation/screens/profileScreens/private_post_section.dart';
-import 'package:penny_places/presentation/screens/profileScreens/public_post_section.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/private_post_section.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/public_post_section.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';

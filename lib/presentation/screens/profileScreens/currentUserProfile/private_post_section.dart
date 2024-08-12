@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:penny_places/main.dart';
 import 'package:penny_places/presentation/providers/privatePostProvider.dart';
+import 'package:penny_places/presentation/screens/profileScreens/currentUserProfile/open_post_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -69,16 +70,37 @@ class _PrivatePostSectionState extends State<PrivatePostSection> {
           ),
           itemCount: images.length,
           itemBuilder: (context, index) {
-            return CachedNetworkImage(
-              imageUrl: images[index],
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                  strokeWidth: 2,
+            final reversedIndex = images.length - 1 - index;
+            final imageUrl = images[reversedIndex];
+            final reversedIndex1 =
+                publicPostProvider.privateProfilePostModel.data!.length -
+                    1 -
+                    index;
+            final index1 = publicPostProvider
+                .privateProfilePostModel.data![reversedIndex1].palaceId;
+            return GestureDetector(
+              onTap: () {
+                debugPrint("index: $index1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OpenPostScreen(
+                      index: index1,
+                    ),
+                  ),
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blue,
+                    strokeWidth: 2,
+                  ),
                 ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
             );
           },
         );

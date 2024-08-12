@@ -806,7 +806,9 @@ class _PrivatePostScreenState extends State<PrivatePostScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                            return const MainScreen();
+                                            return  MainScreen(
+                                              index: 0
+                                            );
                                           },
                                         ),
                                       );

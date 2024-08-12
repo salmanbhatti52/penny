@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:penny_places/presentation/providers/postLikeProvider.dart';
+import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
+import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
+import 'package:penny_places/presentation/screens/main_screen.dart';
+import 'package:penny_places/presentation/screens/nav_bar.dart';
+import 'package:penny_places/presentation/screens/profileScreens/otherUserProfile/other_user_profile.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -328,10 +335,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         PageView.builder(
                                           controller: PageController(
-                                              initialPage: context
-                                                  .read<
-                                                      FetchPlacesPostProvider>()
-                                                  .currentPage),
+                                            initialPage: context
+                                                .read<FetchPlacesPostProvider>()
+                                                .currentPage,
+                                          ),
                                           itemCount: item.images?.length ?? 0,
                                           onPageChanged: (index) {
                                             context
@@ -340,32 +347,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                           itemBuilder: (context, index) {
                                             final image = item.images?[index];
-                                            return CachedNetworkImage(
-                                              width: 390,
-                                              height: 213,
-                                              imageUrl:
-                                                  "${ApiConstants.imageBaseUrl}/${image?.imageName}",
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                child: Shimmer.fromColors(
-                                                  baseColor: Colors.grey[300]!,
-                                                  highlightColor:
-                                                      Colors.grey[100]!,
-                                                  child: Container(
-                                                    width: 390,
-                                                    height: 213,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      shape: BoxShape.rectangle,
+                                            return InkWell(
+                                              onTap: () {
+                                                print("Image tapped");
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FullScreenImageGallery(
+                                                      imageUrls: item.images!
+                                                          .map((e) =>
+                                                              "${ApiConstants.imageBaseUrl}/${e.imageName}")
+                                                          .toList(),
+                                                      initialIndex: index,
                                                     ),
                                                   ),
-                                                ),
+                                                );
+                                              },
+                                              child: CachedNetworkImage(
+                                                width: 390,
+                                                height: 213,
+                                                imageUrl:
+                                                    "${ApiConstants.imageBaseUrl}/${image?.imageName}",
+                                                fit: BoxFit.cover,
                                               ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Icon(Icons.error),
                                             );
                                           },
                                         ),
@@ -381,8 +386,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     (context, provider, child) {
                                                   return SmoothPageIndicator(
                                                     controller: PageController(
-                                                        initialPage: provider
-                                                            .currentPage),
+                                                      initialPage:
+                                                          provider.currentPage,
+                                                    ),
                                                     count: item.images!.length,
                                                     effect: WormEffect(
                                                       dotWidth: 6.0,
@@ -650,86 +656,168 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                child: CachedNetworkImage(
-                                                  width: 47,
-                                                  height: 47,
-                                                  imageUrl:
-                                                      "${ApiConstants.imageBaseUrl}/${item.user?.profilePicture}",
-                                                  fit: BoxFit.cover,
-                                                  placeholder: (context, url) =>
-                                                      Center(
-                                                    child: Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey[300]!,
-                                                      highlightColor:
-                                                          Colors.grey[100]!,
-                                                      child: Container(
-                                                        width: 100.0,
-                                                        height: 100.0,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                          shape:
-                                                              BoxShape.circle,
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (item.user?.userId
+                                                      .toString() !=
+                                                  userID) {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OtherUserProfile(
+                                                      userID: item.user?.userId
+                                                          .toString(),
+                                                    ),
+                                                  ),
+                                                );
+                                              } else {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const MainScreen(
+                                                      index:
+                                                          3, // Navigate to the Profile screen in the NavBar
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Row(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  child: CachedNetworkImage(
+                                                    width: 47,
+                                                    height: 47,
+                                                    imageUrl:
+                                                        "${ApiConstants.imageBaseUrl}/${item.user?.profilePicture}",
+                                                    fit: BoxFit.cover,
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            Center(
+                                                      child: Shimmer.fromColors(
+                                                        baseColor:
+                                                            Colors.grey[300]!,
+                                                        highlightColor:
+                                                            Colors.grey[100]!,
+                                                        child: Container(
+                                                          width: 100.0,
+                                                          height: 100.0,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
                                                   ),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5, bottom: 5),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      item.user?.username ??
-                                                          'Leo Nardo',
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        color: Colors.black,
-                                                        fontSize: 16,
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5, bottom: 5),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        item.user?.username ??
+                                                            'Leo Nardo',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          color: Colors.black,
+                                                          fontSize: 16,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      "${timeago.format(
-                                                        DateTime.parse(item
-                                                                .dateAdded ??
-                                                            DateTime.now()
-                                                                .toString()),
-                                                        locale: 'en_short',
-                                                      )} ago",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        color: const Color(
-                                                            0xFF7F8C8D),
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    )
-                                                  ],
+                                                      Text(
+                                                        "${timeago.format(
+                                                          DateTime.parse(item
+                                                                  .dateAdded ??
+                                                              DateTime.now()
+                                                                  .toString()),
+                                                          locale: 'en_short',
+                                                        )} ago",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          color: const Color(
+                                                              0xFF7F8C8D),
+                                                          fontSize: 11,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 4),
-                                            child: SvgPicture.asset(
-                                              'assets/svg/more.svg',
+                                            child: PopupMenuButton<String>(
+                                              onSelected:
+                                                  (String result) async {
+                                                if (result == 'report') {
+                                                  // Call the reportPlace method from the provider
+                                                  final reportProvider = Provider
+                                                      .of<ReportPlacesProvider>(
+                                                          context,
+                                                          listen: false);
+                                                  reportProvider.reportPlace(
+                                                      userID!,
+                                                      '${item.palaceId}'); // Replace with actual userId and pennyId
+                                                  await Provider.of<
+                                                              FetchPlacesPostProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .getAllPost(userID!);
+                                                }
+                                              },
+                                              itemBuilder:
+                                                  (BuildContext context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                PopupMenuItem<String>(
+                                                  value: 'report',
+                                                  child: Container(
+                                                    height:
+                                                        40, // Adjust the height as needed
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8), // Rounded corners
+                                                    ),
+                                                    child: const Row(
+                                                      children: [
+                                                        Text('Report'),
+                                                        SizedBox(width: 8),
+                                                        Icon(Icons.report,
+                                                            color: Colors.red),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              color: Colors
+                                                  .white, // Set the background color of the popup menu to white
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    8), // Rounded corners for the popup menu
+                                              ),
+                                              child: SvgPicture.asset(
+                                                'assets/svg/more.svg',
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -800,16 +888,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   addHeight(10),
                                   SizedBox(
-                                    height:
-                                        250, // Give a fixed height to the PageView.builder
+                                    height: 250,
                                     child: Stack(
                                       children: [
                                         PageView.builder(
                                           controller: PageController(
-                                              initialPage: context
-                                                  .read<
-                                                      FetchPlacesPostProvider>()
-                                                  .currentPage),
+                                            initialPage: context
+                                                .read<FetchPlacesPostProvider>()
+                                                .currentPage,
+                                          ),
                                           itemCount: item.images?.length ?? 0,
                                           onPageChanged: (index) {
                                             context
@@ -818,32 +905,55 @@ class _HomeScreenState extends State<HomeScreen> {
                                           },
                                           itemBuilder: (context, index) {
                                             final image = item.images?[index];
-                                            return CachedNetworkImage(
-                                              width: 390,
-                                              height: 213,
-                                              imageUrl:
-                                                  "${ApiConstants.imageBaseUrl}/${image?.imageName}",
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                child: Shimmer.fromColors(
-                                                  baseColor: Colors.grey[300]!,
-                                                  highlightColor:
-                                                      Colors.grey[100]!,
-                                                  child: Container(
-                                                    width: 390,
-                                                    height: 213,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      shape: BoxShape.rectangle,
+                                            return GestureDetector(
+                                              onTap: () {
+                                                print("Image tapped");
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FullScreenImageGallery(
+                                                      imageUrls: item.images!
+                                                          .map((e) =>
+                                                              "${ApiConstants.imageBaseUrl}/${e.imageName}")
+                                                          .toList(),
+                                                      initialIndex: index,
                                                     ),
                                                   ),
+                                                );
+                                              },
+                                              child: Container(
+                                                // Added Container
+                                                child: CachedNetworkImage(
+                                                  width: 390,
+                                                  height: 213,
+                                                  imageUrl:
+                                                      "${ApiConstants.imageBaseUrl}/${image?.imageName}",
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child: Shimmer.fromColors(
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.grey[100]!,
+                                                      child: Container(
+                                                        width: 390,
+                                                        height: 213,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape: BoxShape
+                                                              .rectangle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
                                                 ),
                                               ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Icon(Icons.error),
                                             );
                                           },
                                         ),
@@ -859,8 +969,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     (context, provider, child) {
                                                   return SmoothPageIndicator(
                                                     controller: PageController(
-                                                        initialPage: provider
-                                                            .currentPage),
+                                                      initialPage:
+                                                          provider.currentPage,
+                                                    ),
                                                     count: item.images!.length,
                                                     effect: WormEffect(
                                                       dotWidth: 6.0,

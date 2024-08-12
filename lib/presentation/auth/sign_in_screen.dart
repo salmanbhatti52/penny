@@ -272,7 +272,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return const MainScreen();
+                                    return  MainScreen(
+                                      index: 0,
+                                    );
                                   },
                                 ),
                               );

@@ -24,7 +24,8 @@ class OpenPostProvider with ChangeNotifier {
   Future<void> getAllPost(String id, int pennyId) async {
     String apiUrl = "${ApiConstants.baseUrl}/get_place";
     print("api: $apiUrl");
-
+    _imageUrls.clear();
+    _quotedImageUrls.clear();
     _isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();

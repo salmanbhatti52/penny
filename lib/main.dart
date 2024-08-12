@@ -13,6 +13,7 @@ import 'package:penny_places/presentation/providers/postLikeProvider.dart';
 import 'package:penny_places/presentation/providers/postPlaceCountProvider.dart';
 import 'package:penny_places/presentation/providers/privatePostProvider.dart';
 import 'package:penny_places/presentation/providers/publicPostProvider.dart';
+import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
 import 'package:penny_places/presentation/screens/onboarding_screen.dart';
 import 'package:penny_places/presentation/screens/splash_screen.dart';
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PostLikeProvider()),
         ChangeNotifierProvider(create: (_) => PostPlaceCountProvider()),
         ChangeNotifierProvider(create: (_) => OpenPostProvider()),
+        ChangeNotifierProvider(create: (_) => ReportPlacesProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -127,7 +129,7 @@ class _MyAppState extends State<MyApp> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data == true) {
-                return const MainScreen();
+                return const MainScreen(index: 0);
               } else {
                 return const Onboarding();
               }

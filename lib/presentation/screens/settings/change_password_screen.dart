@@ -354,7 +354,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                      return const MainScreen();
+                                      return const MainScreen(
+                                        index: 0,
+                                      );
                                     },
                                   ),
                                 );

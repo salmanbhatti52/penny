@@ -85,8 +85,6 @@ class _PublicPostScreenState extends State<PublicPostScreen> {
     loadData();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -812,7 +810,7 @@ class _PublicPostScreenState extends State<PublicPostScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                            return const MainScreen();
+                                            return const MainScreen(index: 0);
                                           },
                                         ),
                                       );

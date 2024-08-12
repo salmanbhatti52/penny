@@ -34,10 +34,9 @@ class GetProfileProvider with ChangeNotifier {
       print("in 200 get_profile");
       print("SuccessFull");
       _getProfileModel = getProfileModelFromJson(responseString);
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _isLoading = false;
-    notifyListeners();
 
     print('get_profile status: ${_getProfileModel.status}');
   }
