@@ -52,6 +52,10 @@ class FetchPlacesPostProvider with ChangeNotifier {
                   place.placeTypeName
                           ?.toLowerCase()
                           .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.user!.username
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
                       true)
               .toList() ??
           [];
