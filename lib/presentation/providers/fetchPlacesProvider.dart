@@ -6,7 +6,16 @@ import 'package:penny_places/data/models/fetch_places_model.dart';
 
 class FetchPlacesPostProvider with ChangeNotifier {
   bool _isLoading = false;
-  bool _isFirstLoad = true;
+  bool _isFirstLoad = false;
+  FetchPlacesPostProvider() {
+    resetFirstLoad();
+  }
+
+  void resetFirstLoad() {
+    _isFirstLoad = true;
+    notifyListeners();
+  }
+
   FetchPlacesModel _fetchPlacesModel = FetchPlacesModel();
   List<String> _imageUrls = [];
   List<String> _quotedImageUrls = [];
@@ -46,6 +55,12 @@ class FetchPlacesPostProvider with ChangeNotifier {
                       true)
               .toList() ??
           [];
+    }
+    print("_filteredPlaces:");
+    for (int i = 0; i < _filteredPlaces.length; i++) {
+      var place = _filteredPlaces[i];
+      print(
+          "Place $i: ID: ${place.palaceId}, Name: ${place.placeName}, Description: ${place.placeDescription}");
     }
     notifyListeners();
   }

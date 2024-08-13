@@ -35,6 +35,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController search = TextEditingController();
   late PostLikeProvider postLikeProvider;
+  late FetchPlacesPostProvider fetchPlacesPostProvider;
   loadData() async {
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
@@ -49,6 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     loadData();
     postLikeProvider = PostLikeProvider();
+    fetchPlacesPostProvider = FetchPlacesPostProvider();
+    fetchPlacesPostProvider.resetFirstLoad();
   }
 
   @override
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer<FetchPlacesPostProvider>(
         builder: (context, getAllPostProvider, child) {
       final data = getAllPostProvider.fetchPlacesModel.data;
-      List<Datum> data1 = getAllPostProvider.filteredPlaces;
+      final filteredData = getAllPostProvider.filteredPlaces;
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -105,10 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       fillColor: const Color(0xFFF4F4F4),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          'assets/svg/search.svg',
-                          width: 23,
-                          height: 23,
+                        child: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: SvgPicture.asset(
+                            'assets/svg/search.svg',
+                            width: 23,
+                            height: 23,
+                          ),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -149,10 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount: data?.length ?? 0,
+                          itemCount: search.text.isNotEmpty
+                              ? filteredData.length
+                              : data?.length ?? 0,
                           itemBuilder: (context, index) {
-                            final item = data?[data.length - 1 - index];
-                            print("item: ${item!.images!.length}");
+                            final item = search.text.isNotEmpty
+                                ? filteredData[index]
+                                : data![data.length - 1 - index];
+                            print("item: ${item.images!.length}");
                             print("User Names: ${item.user?.username}");
                             // print("Review Text: ${item.reviews![index].review}");
                             // print("Review Rating: ${item.reviews![index].rating}");
@@ -592,10 +604,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //   ],
                                         // )
                                         GestureDetector(
-                                          onTap: () {
-                                            _showBottomSheet(context, index,
-                                                getAllPostProvider);
-                                          },
+                                          onTap: () {},
                                           child: Text(
                                             'Write a review...',
                                             style: GoogleFonts.poppins(
@@ -627,11 +636,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: search.text.isNotEmpty
-                              ? data1.length ?? 0
+                              ? filteredData.length
                               : data?.length ?? 0,
                           itemBuilder: (context, index) {
-                            final item = data?[data.length - 1 - index];
-                            print("item: ${item!.images!.length}");
+                            final item = search.text.isNotEmpty
+                                ? filteredData[index]
+                                : data![data.length - 1 - index];
+                            print("item: ${item.images!.length}");
                             print("User Names: ${item.user?.username}");
                             // print("Review Text: ${item.reviews![index].review}");
                             // print("Review Rating: ${item.reviews![index].rating}");
@@ -794,17 +805,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   child: Container(
                                                     height:
                                                         40, // Adjust the height as needed
+
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              8), // Rounded corners
+                                                              14), // Rounded corners
                                                     ),
                                                     child: const Row(
                                                       children: [
                                                         Text('Report'),
                                                         SizedBox(width: 8),
-                                                        Icon(Icons.report,
-                                                            color: Colors.red),
+                                                        Icon(
+                                                          Icons.report,
+                                                          color: Colors.red,
+                                                          size: 22,
+                                                        ),
                                                       ],
                                                     ),
                                                   ),

@@ -21,6 +21,45 @@ class OpenPostProvider with ChangeNotifier {
     notifyListeners(); // Notify listeners when currentPage changes
   }
 
+    List<Datum> _filteredPlaces = [];
+
+  List<Datum> get filteredPlaces =>
+      _filteredPlaces.isEmpty ? _openProfilePostModel.data ?? [] : _filteredPlaces;
+
+  void filterPlaces(String keyword) {
+    if (keyword.isEmpty) {
+      _filteredPlaces = [];
+    } else {
+      _filteredPlaces = _openProfilePostModel.data
+              ?.where((place) =>
+                  place.placeName
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeDescription
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeLocation
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true ||
+                  place.placeTypeName
+                          ?.toLowerCase()
+                          .contains(keyword.toLowerCase()) ==
+                      true)
+              .toList() ??
+          [];
+    }
+    print("_filteredPlaces:");
+    for (int i = 0; i < _filteredPlaces.length; i++) {
+      var place = _filteredPlaces[i];
+      print(
+          "Place $i: ID: ${place.palaceId}, Name: ${place.placeName}, Description: ${place.placeDescription}");
+    }
+    notifyListeners();
+  }
+
   Future<void> getAllPost(String id, int pennyId) async {
     String apiUrl = "${ApiConstants.baseUrl}/get_place";
     print("api: $apiUrl");

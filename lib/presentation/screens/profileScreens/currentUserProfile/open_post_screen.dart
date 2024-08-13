@@ -6,7 +6,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:like_button/like_button.dart';
 import 'package:penny_places/core/constants/constants_colors.dart';
+import 'package:penny_places/presentation/providers/fetchPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/postLikeProvider.dart';
+import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
+import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
 import 'package:penny_places/presentation/widgets/expandable_text_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -256,15 +259,15 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                       ),
                                       addHeight(10),
                                       SizedBox(
-                                        height:
-                                            250, // Give a fixed height to the PageView.builder
+                                        height: 250,
                                         child: Stack(
                                           children: [
                                             PageView.builder(
                                               controller: PageController(
-                                                  initialPage: context
-                                                      .read<OpenPostProvider>()
-                                                      .currentPage),
+                                                initialPage: context
+                                                    .read<OpenPostProvider>()
+                                                    .currentPage,
+                                              ),
                                               itemCount:
                                                   item.images.length ?? 0,
                                               onPageChanged: (index) {
@@ -275,34 +278,59 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                               itemBuilder: (context, index) {
                                                 final image =
                                                     item.images[index];
-                                                return CachedNetworkImage(
-                                                  width: 390,
-                                                  height: 213,
-                                                  imageUrl:
-                                                      "${ApiConstants.imageBaseUrl}/${image.imageName}",
-                                                  fit: BoxFit.cover,
-                                                  placeholder: (context, url) =>
-                                                      Center(
-                                                    child: Shimmer.fromColors(
-                                                      baseColor:
-                                                          Colors.grey[300]!,
-                                                      highlightColor:
-                                                          Colors.grey[100]!,
-                                                      child: Container(
-                                                        width: 390,
-                                                        height: 213,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                          shape: BoxShape
-                                                              .rectangle,
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    print("Image tapped");
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            FullScreenImageGallery(
+                                                          imageUrls: item.images
+                                                              .map((e) =>
+                                                                  "${ApiConstants.imageBaseUrl}/${e.imageName}")
+                                                              .toList(),
+                                                          initialIndex: index,
                                                         ),
                                                       ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    // Added Container
+                                                    child: CachedNetworkImage(
+                                                      width: 390,
+                                                      height: 213,
+                                                      imageUrl:
+                                                          "${ApiConstants.imageBaseUrl}/${image.imageName}",
+                                                      fit: BoxFit.cover,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Center(
+                                                        child:
+                                                            Shimmer.fromColors(
+                                                          baseColor:
+                                                              Colors.grey[300]!,
+                                                          highlightColor:
+                                                              Colors.grey[100]!,
+                                                          child: Container(
+                                                            width: 390,
+                                                            height: 213,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              shape: BoxShape
+                                                                  .rectangle,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
                                                     ),
                                                   ),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
                                                 );
                                               },
                                             ),
@@ -317,9 +345,11 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                                     builder: (context, provider,
                                                         child) {
                                                       return SmoothPageIndicator(
-                                                        controller: PageController(
-                                                            initialPage: provider
-                                                                .currentPage),
+                                                        controller:
+                                                            PageController(
+                                                          initialPage: provider
+                                                              .currentPage,
+                                                        ),
                                                         count:
                                                             item.images.length,
                                                         effect: WormEffect(
@@ -700,8 +730,76 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             right: 4),
-                                                    child: SvgPicture.asset(
-                                                      'assets/svg/more.svg',
+                                                    child:
+                                                        PopupMenuButton<String>(
+                                                      onSelected: (String
+                                                          result) async {
+                                                        if (result ==
+                                                            'report') {
+                                                          // Call the reportPlace method from the provider
+                                                          final reportProvider =
+                                                              Provider.of<
+                                                                      ReportPlacesProvider>(
+                                                                  context,
+                                                                  listen:
+                                                                      false);
+                                                          reportProvider
+                                                              .reportPlace(
+                                                                  userID!,
+                                                                  '${item.palaceId}'); // Replace with actual userId and pennyId
+                                                          await Provider.of<
+                                                                      OpenPostProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .getAllPost(
+                                                                  userID!,
+                                                                  item.palaceId);
+                                                        }
+                                                      },
+                                                      itemBuilder: (BuildContext
+                                                              context) =>
+                                                          <PopupMenuEntry<
+                                                              String>>[
+                                                        PopupMenuItem<String>(
+                                                          value: 'report',
+                                                          child: Container(
+                                                            height:
+                                                                40, // Adjust the height as needed
+
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          14), // Rounded corners
+                                                            ),
+                                                            child: const Row(
+                                                              children: [
+                                                                Text('Report'),
+                                                                SizedBox(
+                                                                    width: 8),
+                                                                Icon(
+                                                                  Icons.report,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  size: 22,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                      color: Colors
+                                                          .white, // Set the background color of the popup menu to white
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8), // Rounded corners for the popup menu
+                                                      ),
+                                                      child: SvgPicture.asset(
+                                                        'assets/svg/more.svg',
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -781,16 +879,16 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                           ),
                                           addHeight(10),
                                           SizedBox(
-                                            height:
-                                                250, // Give a fixed height to the PageView.builder
+                                            height: 250,
                                             child: Stack(
                                               children: [
                                                 PageView.builder(
                                                   controller: PageController(
-                                                      initialPage: context
-                                                          .read<
-                                                              OpenPostProvider>()
-                                                          .currentPage),
+                                                    initialPage: context
+                                                        .read<
+                                                            OpenPostProvider>()
+                                                        .currentPage,
+                                                  ),
                                                   itemCount:
                                                       item.images.length ?? 0,
                                                   onPageChanged: (index) {
@@ -803,38 +901,63 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                                       (context, index) {
                                                     final image =
                                                         item.images[index];
-                                                    return CachedNetworkImage(
-                                                      width: 390,
-                                                      height: 213,
-                                                      imageUrl:
-                                                          "${ApiConstants.imageBaseUrl}/${image.imageName}",
-                                                      fit: BoxFit.cover,
-                                                      placeholder:
-                                                          (context, url) =>
-                                                              Center(
-                                                        child:
-                                                            Shimmer.fromColors(
-                                                          baseColor:
-                                                              Colors.grey[300]!,
-                                                          highlightColor:
-                                                              Colors.grey[100]!,
-                                                          child: Container(
-                                                            width: 390,
-                                                            height: 213,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              shape: BoxShape
-                                                                  .rectangle,
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        print("Image tapped");
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                FullScreenImageGallery(
+                                                              imageUrls: item
+                                                                  .images
+                                                                  .map((e) =>
+                                                                      "${ApiConstants.imageBaseUrl}/${e.imageName}")
+                                                                  .toList(),
+                                                              initialIndex:
+                                                                  index,
                                                             ),
                                                           ),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        // Added Container
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          width: 390,
+                                                          height: 213,
+                                                          imageUrl:
+                                                              "${ApiConstants.imageBaseUrl}/${image.imageName}",
+                                                          fit: BoxFit.cover,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Center(
+                                                            child: Shimmer
+                                                                .fromColors(
+                                                              baseColor: Colors
+                                                                  .grey[300]!,
+                                                              highlightColor:
+                                                                  Colors.grey[
+                                                                      100]!,
+                                                              child: Container(
+                                                                width: 390,
+                                                                height: 213,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  shape: BoxShape
+                                                                      .rectangle,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
                                                         ),
                                                       ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.error),
                                                     );
                                                   },
                                                 ),
@@ -852,9 +975,9 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                                                           return SmoothPageIndicator(
                                                             controller:
                                                                 PageController(
-                                                                    initialPage:
-                                                                        provider
-                                                                            .currentPage),
+                                                              initialPage: provider
+                                                                  .currentPage,
+                                                            ),
                                                             count: item
                                                                 .images.length,
                                                             effect: WormEffect(
