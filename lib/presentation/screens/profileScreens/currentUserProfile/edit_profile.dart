@@ -12,6 +12,7 @@ import 'package:penny_places/core/constants/constants_colors.dart';
 import 'package:penny_places/core/helper/size_box_extension.dart';
 import 'package:penny_places/main.dart';
 import 'package:penny_places/presentation/providers/editProfileProvider.dart';
+import 'package:penny_places/presentation/widgets/custom_toast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -59,7 +60,8 @@ class _EditProfileState extends State<EditProfile> {
       print('Failed to pick image: ${e.toString()}');
     }
   }
-    String? base64Image;
+
+  String? base64Image;
   Future<void> convertImageToBase64(String imageUrl) async {
     final response = await http.get(Uri.parse(imageUrl));
 
@@ -354,6 +356,8 @@ class _EditProfileState extends State<EditProfile> {
                                         .editProfileModel.data!.profilePicture);
                                 print("successful");
                                 Navigator.of(context).pop();
+                                CustomToast.show("Profile Updated successfully",
+                                    Colors.green);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

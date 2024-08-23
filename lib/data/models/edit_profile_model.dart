@@ -54,7 +54,7 @@ class Data {
   dynamic authenticationToken;
   DateTime dateAdded;
   String status;
-  String verifyCode;
+  String? verifyCode;
   String notifications;
 
   Data({
@@ -73,7 +73,7 @@ class Data {
     required this.authenticationToken,
     required this.dateAdded,
     required this.status,
-    required this.verifyCode,
+    this.verifyCode,
     required this.notifications,
   });
 
