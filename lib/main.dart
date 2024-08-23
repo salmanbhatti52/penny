@@ -27,12 +27,13 @@ class AppBloc {
 
   void checkOnboardingStatus() async {
     _prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     bool shownOnboarding = _prefs?.getBool('shownOnboarding') ?? true;
     prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     userName = prefs?.getString('userName');
     email = prefs?.getString('email');
-    profilePic = prefs?.getString('profilePicture');
+    profilePic = prefs!.getString('profilePicture');
     bio = prefs?.getString('bio');
     debugPrint("userID: $userID");
     debugPrint("userName: $userName");

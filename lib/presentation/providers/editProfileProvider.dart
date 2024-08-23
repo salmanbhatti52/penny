@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:penny_places/core/constants/api_constants.dart';
 import 'package:penny_places/data/models/edit_profile_model.dart';
+import 'package:penny_places/presentation/widgets/custom_toast.dart';
 
 class EditProfileProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -30,10 +33,17 @@ class EditProfileProvider with ChangeNotifier {
     final responseString = response.body;
     print("edit_bio: $responseString");
     print("status Code edit_bio: ${response.statusCode}");
+    var data = jsonDecode(responseString);
 
     if (response.statusCode == 200) {
       print("in 200 edit_bio");
       print("SuccessFull");
+      _editProfileModel = editProfileModelFromJson(responseString);
+      print("_editProfileModel : ${_editProfileModel.message}");
+      if (data['status'] == "error") {
+        CustomToast.show("${data['message']}", Colors.red);
+      }
+    } else {
       _editProfileModel = editProfileModelFromJson(responseString);
     }
 

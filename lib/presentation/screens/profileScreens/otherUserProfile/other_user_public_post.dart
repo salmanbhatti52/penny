@@ -18,7 +18,7 @@ class OtherUserPublicPost extends StatefulWidget {
 
 class _OtherUserPublicPostState extends State<OtherUserPublicPost> {
   loadData() async {
-        prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     userID = prefs?.getString('userID');
     userName = prefs?.getString('userName');
     bio = prefs?.getString('bio');
@@ -65,6 +65,11 @@ class _OtherUserPublicPostState extends State<OtherUserPublicPost> {
         }
 
         final images = publicPostProvider.imageUrls;
+        if (images.isEmpty) {
+          return const Center(
+            child: Text('No posts for this user'),
+          );
+        }
 
         print("images: $images");
         return GridView.builder(

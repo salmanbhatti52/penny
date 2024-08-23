@@ -9,7 +9,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PublicPostSection extends StatefulWidget {
-  const PublicPostSection({super.key, });
+  const PublicPostSection({
+    super.key,
+  });
 
   @override
   State<PublicPostSection> createState() => _PublicPostSectionState();
@@ -62,6 +64,11 @@ class _PublicPostSectionState extends State<PublicPostSection> {
         }
 
         final images = publicPostProvider.imageUrls;
+        if (images.isEmpty) {
+          return const Center(
+            child: Text('Wow Such Empty'),
+          );
+        }
 
         print("images: $images");
         return GridView.builder(

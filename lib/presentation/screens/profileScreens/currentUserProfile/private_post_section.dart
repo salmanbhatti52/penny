@@ -61,6 +61,12 @@ class _PrivatePostSectionState extends State<PrivatePostSection> {
         }
 
         final images = publicPostProvider.imageUrls;
+        if (images.isEmpty) {
+          return const Center(
+            child: Text('Wow Such Empty'),
+          );
+        }
+
         print("images: $images");
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

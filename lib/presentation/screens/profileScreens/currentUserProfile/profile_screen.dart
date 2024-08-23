@@ -474,7 +474,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     addHeight(10),
                     Center(
                       child: Text(
-                        userName!,
+                        userName ?? 'Penny User',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,

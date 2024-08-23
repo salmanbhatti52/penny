@@ -9,6 +9,7 @@ import 'package:penny_places/core/helper/size_box_extension.dart';
 import 'package:penny_places/presentation/auth/sign_in_screen.dart';
 import 'package:penny_places/presentation/providers/signUpProvider.dart';
 import 'package:penny_places/presentation/widgets/custom_text_widget.dart';
+import 'package:penny_places/presentation/widgets/custom_toast.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -421,6 +422,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   },
                                 ),
                               );
+                              CustomToast.show(
+                                  "Your account created successfully",
+                                  Colors.green);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(

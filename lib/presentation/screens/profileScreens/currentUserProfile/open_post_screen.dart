@@ -10,6 +10,7 @@ import 'package:penny_places/presentation/providers/fetchPlacesProvider.dart';
 import 'package:penny_places/presentation/providers/postLikeProvider.dart';
 import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
 import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
+import 'package:penny_places/presentation/widgets/custom_toast.dart';
 import 'package:penny_places/presentation/widgets/expandable_text_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -1523,7 +1524,11 @@ class OpenPostScreenState extends State<OpenPostScreen> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    _addReview(context, index, ratings1!, openPostProvider);
+                    if (ratings1 == null) {
+                      CustomToast.show("Please add ratings", Colors.red);
+                    } else {
+                      _addReview(context, index, ratings1!, openPostProvider);
+                    }
                   },
                   child: Container(
                     width: 197,
@@ -1537,7 +1542,13 @@ class OpenPostScreenState extends State<OpenPostScreen> {
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                    child: const Column(
+                    child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blue,
+                  ),
+                )
+              :const Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -1712,6 +1723,7 @@ class OpenPostScreenState extends State<OpenPostScreen> {
     );
   }
 
+  bool isLoading = false;
   final TextEditingController _reviewController = TextEditingController();
 
   void _addReview(BuildContext context, int index, double rating,
@@ -1720,7 +1732,7 @@ class OpenPostScreenState extends State<OpenPostScreen> {
         .text; // You can get this dynamically based on user input
     final userId = userID; // Replace with actual user ID
     final placeId = openPostProvider.openProfilePostModel.data![index].palaceId;
-
+    isLoading = true;
     if (reviewText.isNotEmpty) {
       final response = await http.post(
         Uri.parse("${ApiConstants.baseUrl}/review_add"),
@@ -1739,10 +1751,12 @@ class OpenPostScreenState extends State<OpenPostScreen> {
         print(responseData['message']);
         _reviewController.clear();
         openPostProvider.refreshData(userId!, widget.index);
-        Navigator.pop(context); // Close the bottom sheet
+        Navigator.pop(context);
+        // Close the bottom sheet
       } else {
         print("Failed to add review: ${responseData['message']}");
       }
+      isLoading = false;
     }
   }
 }

@@ -41,7 +41,7 @@ class Data {
   String email;
   String password;
   String accountType;
-  dynamic profilePicture;
+  String profilePicture;
   dynamic profileBio;
   dynamic socialAccType;
   dynamic googleAccessToken;

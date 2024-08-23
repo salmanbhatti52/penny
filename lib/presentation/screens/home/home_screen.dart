@@ -11,6 +11,7 @@ import 'package:penny_places/presentation/providers/reportPlaceProvider.dart';
 import 'package:penny_places/presentation/screens/home/photo/full_photo_view.dart';
 import 'package:penny_places/presentation/screens/main_screen.dart';
 import 'package:penny_places/presentation/screens/profileScreens/otherUserProfile/other_user_profile.dart';
+import 'package:penny_places/presentation/widgets/custom_toast.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1515,33 +1516,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                    child: const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: Row(
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.blue,
+                            ),
+                          )
+                        : const Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                'Post',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  height: 0,
+                              SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Post',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w500,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
@@ -1690,7 +1697,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final TextEditingController _reviewController = TextEditingController();
-
+  bool isLoading = false;
   void _addReview(BuildContext context, int index, double rating,
       FetchPlacesPostProvider fetchPlacesPostProvider) async {
     final reviewText = _reviewController
@@ -1698,7 +1705,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final userId = userID; // Replace with actual user ID
     final placeId =
         fetchPlacesPostProvider.fetchPlacesModel.data![index].palaceId;
-
+    isLoading = true;
     if (reviewText.isNotEmpty) {
       final response = await http.post(
         Uri.parse("${ApiConstants.baseUrl}/review_add"),
@@ -1720,7 +1727,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.pop(context); // Close the bottom sheet
       } else {
         print("Failed to add review: ${responseData['message']}");
+        CustomToast.show(
+            "Failed to add review: ${responseData['message']}", Colors.red);
       }
+      isLoading = false;
     }
   }
 }
